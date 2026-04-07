@@ -1,0 +1,281 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
+:root {
+  color-scheme: light;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background-color: #eef4ff;
+  color: #0f172a;
+  line-height: 1.6;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  --surface: rgba(255, 255, 255, 0.72);
+  --surface-strong: rgba(255, 255, 255, 0.9);
+  --border: rgba(37, 99, 235, 0.12);
+  --text-color: #0f172a;
+  --text-soft: #334155;
+  --text-muted: #64748b;
+  --app-bg:
+    radial-gradient(circle at top left, rgba(96, 165, 250, 0.24), transparent 32%),
+    radial-gradient(circle at 100% 18%, rgba(56, 189, 248, 0.2), transparent 26%),
+    radial-gradient(circle at 50% 100%, rgba(59, 130, 246, 0.14), transparent 32%),
+    linear-gradient(180deg, #f8fbff 0%, #eaf1ff 100%);
+  --grid-line: rgba(15, 23, 42, 0.045);
+  --header-bg: rgba(248, 251, 255, 0.82);
+  --header-border: rgba(148, 163, 184, 0.22);
+  --chip-bg: rgba(255, 255, 255, 0.76);
+  --chip-bg-soft: rgba(255, 255, 255, 0.54);
+  --chip-border: rgba(148, 163, 184, 0.28);
+  --chip-text: #334155;
+  --input-bg: rgba(255, 255, 255, 0.76);
+  --input-border: rgba(148, 163, 184, 0.28);
+  --table-head-bg: rgba(255, 255, 255, 0.78);
+  --table-footer-bg: rgba(255, 255, 255, 0.72);
+  --table-row-hover: rgba(255, 255, 255, 0.42);
+  --overlay: rgba(15, 23, 42, 0.46);
+  --selection: rgba(59, 130, 246, 0.24);
+  --shadow-color: rgba(15, 23, 42, 0.22);
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  background-color: #081121;
+  color: #e2e8f0;
+  --surface: rgba(8, 20, 40, 0.72);
+  --surface-strong: rgba(10, 24, 46, 0.9);
+  --border: rgba(125, 211, 252, 0.12);
+  --text-color: #e2e8f0;
+  --text-soft: #cbd5e1;
+  --text-muted: #94a3b8;
+  --app-bg:
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.32), transparent 28%),
+    radial-gradient(circle at 100% 0%, rgba(14, 165, 233, 0.2), transparent 24%),
+    radial-gradient(circle at 50% 100%, rgba(59, 130, 246, 0.18), transparent 32%),
+    linear-gradient(180deg, #07101e 0%, #0d1727 45%, #101d30 100%);
+  --grid-line: rgba(148, 163, 184, 0.05);
+  --header-bg: rgba(7, 16, 30, 0.82);
+  --header-border: rgba(125, 211, 252, 0.14);
+  --chip-bg: rgba(15, 23, 42, 0.72);
+  --chip-bg-soft: rgba(15, 23, 42, 0.52);
+  --chip-border: rgba(125, 211, 252, 0.14);
+  --chip-text: #cbd5e1;
+  --input-bg: rgba(15, 23, 42, 0.76);
+  --input-border: rgba(125, 211, 252, 0.16);
+  --table-head-bg: rgba(8, 20, 40, 0.88);
+  --table-footer-bg: rgba(8, 20, 40, 0.8);
+  --table-row-hover: rgba(15, 23, 42, 0.56);
+  --overlay: rgba(2, 6, 23, 0.68);
+  --selection: rgba(96, 165, 250, 0.32);
+  --shadow-color: rgba(2, 6, 23, 0.5);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  background: var(--app-bg);
+  color: var(--text-color);
+}
+
+#root {
+  min-height: 100vh;
+  width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+::selection {
+  background: var(--selection);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  body {
+    color: var(--text-color);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    letter-spacing: -0.03em;
+  }
+}
+
+@layer components {
+  .app-shell {
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+  }
+
+  .app-shell::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 72px 72px;
+    mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.55), transparent 85%);
+  }
+
+  .glass-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: 0 24px 70px -40px var(--shadow-color);
+    backdrop-filter: blur(22px);
+  }
+
+  .glass-panel-strong {
+    background: var(--surface-strong);
+    border: 1px solid var(--border);
+    box-shadow: 0 30px 90px -45px var(--shadow-color);
+    backdrop-filter: blur(22px);
+  }
+
+  .soft-ring {
+    box-shadow: 0 0 0 6px rgba(59, 130, 246, 0.1);
+  }
+
+  .section-title {
+    font-size: 1.875rem;
+    line-height: 1.1;
+    font-weight: 700;
+    color: var(--text-color);
+  }
+
+  .section-copy {
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: var(--text-soft);
+  }
+
+  .theme-text {
+    color: var(--text-color);
+  }
+
+  .theme-text-soft {
+    color: var(--text-soft);
+  }
+
+  .theme-text-muted {
+    color: var(--text-muted);
+  }
+
+  .theme-border {
+    border-color: var(--chip-border);
+  }
+
+  .theme-chip {
+    background: var(--chip-bg);
+    border-color: var(--chip-border);
+    color: var(--chip-text);
+  }
+
+  .theme-subtle-chip {
+    background: var(--chip-bg-soft);
+    color: var(--chip-text);
+  }
+
+  .theme-topbar {
+    background: var(--header-bg);
+    border-color: var(--header-border);
+  }
+
+  .theme-input {
+    background: var(--input-bg);
+    border-color: var(--input-border);
+    color: var(--text-color);
+  }
+
+  .theme-input::placeholder {
+    color: var(--text-muted);
+  }
+
+  .theme-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image:
+      linear-gradient(45deg, transparent 50%, var(--text-muted) 50%),
+      linear-gradient(135deg, var(--text-muted) 50%, transparent 50%);
+    background-position:
+      calc(100% - 20px) calc(50% - 2px),
+      calc(100% - 14px) calc(50% - 2px);
+    background-size: 6px 6px, 6px 6px;
+    background-repeat: no-repeat;
+    padding-right: 3.25rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+
+  .theme-toggle {
+    background: var(--chip-bg);
+    border-color: var(--chip-border);
+    color: var(--chip-text);
+  }
+
+  .theme-table-head {
+    background: var(--table-head-bg);
+  }
+
+  .theme-row-divider {
+    border-color: var(--border);
+  }
+
+  .theme-row-hover:hover {
+    background: var(--table-row-hover);
+  }
+
+  .theme-footer-strip {
+    background: var(--table-footer-bg);
+    border-color: var(--border);
+  }
+
+  .theme-modal-header,
+  .theme-modal-footer {
+    background: var(--surface-strong);
+    border-color: var(--border);
+  }
+
+  .theme-icon-button {
+    background: var(--chip-bg);
+    border-color: var(--chip-border);
+    color: var(--text-soft);
+  }
+
+  .theme-icon-button:hover {
+    color: var(--text-color);
+  }
+}
+
+@media (min-width: 640px) {
+  .section-title {
+    font-size: 2.25rem;
+  }
+
+  .section-copy {
+    font-size: 1rem;
+  }
+}
