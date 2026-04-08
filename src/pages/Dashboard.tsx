@@ -552,7 +552,6 @@ export default function Dashboard() {
                             onChange={(event) => handleAssignTask(task._id, event.target.value)}
                             className="theme-input theme-select glass-panel-strong min-w-[180px] rounded-2xl border px-3 py-2.5 outline-none transition focus:border-primary-400 focus:ring-4 focus:ring-primary-100"
                           >
-                            <option value="">Unassigned</option>
                             {assignableUsers.map((assignableUser) => (
                               <option key={assignableUser.id} value={assignableUser.id}>
                                 {assignableUser.name}
