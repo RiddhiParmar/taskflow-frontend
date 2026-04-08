@@ -20,9 +20,9 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 };
 
 function AppContent() {
-  const { user, isLoading } = useAuth();
+  const { user, isInitializing } = useAuth();
 
-  if (isLoading) {
+  if (isInitializing) {
     return (
       <div className="app-shell flex min-h-screen items-center justify-center">
         <LoadingSpinner message="Initializing TaskFlow..." />

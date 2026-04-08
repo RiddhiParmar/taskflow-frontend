@@ -11,6 +11,7 @@ interface User {
 interface AuthContextType {
   user: User | null;
   token: string | null;
+  isInitializing: boolean;
   isLoading: boolean;
   error: string | null;
   register: (email: string, firstName: string, lastName: string, password: string) => Promise<void>;
@@ -55,17 +56,21 @@ const getAuthToken = (response: LoginResponse): string | null =>
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
+  const [isInitializing, setIsInitializing] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   // Load user from localStorage on mount
   useEffect(() => {
     const savedToken = apiClient.getToken();
-    if (savedToken) {
-      setToken(savedToken);
-      apiClient.setToken(savedToken);
-      checkAuth();
+    if (!savedToken) {
+      setIsInitializing(false);
+      return;
     }
+
+    setToken(savedToken);
+    apiClient.setToken(savedToken);
+    checkAuth();
   }, []);
 
   const checkAuth = async () => {
@@ -76,6 +81,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       localStorage.removeItem('accessToken');
       setToken(null);
       setUser(null);
+    } finally {
+      setIsInitializing(false);
     }
   };
 
@@ -140,6 +147,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const value: AuthContextType = {
     user,
     token,
+    isInitializing,
     isLoading,
     error,
     register,

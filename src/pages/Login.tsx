@@ -34,8 +34,8 @@ export default function Login() {
       isValid = false;
     }
 
-    if (!formData.password || formData.password.length < 6) {
-      errors.password = 'Password required (min 6 chars)';
+    if (!formData.password || formData.password.length < 8) {
+      errors.password = 'password must be a 8 characters log';
       isValid = false;
     }
 
