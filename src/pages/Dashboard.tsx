@@ -65,6 +65,8 @@ export default function Dashboard() {
   const PAGE_SIZE = 10;
   const priorityRank = { low: 1, medium: 2, high: 3 } as const;
   const statusRank = { pending: 1, 'in-progress': 2, completed: 3 } as const;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
   const navigate = useNavigate();
   const { user, logout } = useAuth();
   const { 
@@ -99,7 +101,24 @@ export default function Dashboard() {
 
   const completedTasks = tasks.filter((task) => task.status === 'completed').length;
   const activeTasks = tasks.filter((task) => task.status === 'in-progress').length;
-  const upcomingTasks = tasks.filter((task) => task.dueDate && new Date(task.dueDate) >= new Date()).length;
+  const upcomingTasks = tasks.filter((task) => {
+    if (!task.dueDate || task.status === 'completed') {
+      return false;
+    }
+
+    const dueDate = new Date(task.dueDate);
+    dueDate.setHours(0, 0, 0, 0);
+    return dueDate >= today;
+  }).length;
+  const overdueTasks = tasks.filter((task) => {
+    if (!task.dueDate || task.status === 'completed') {
+      return false;
+    }
+
+    const dueDate = new Date(task.dueDate);
+    dueDate.setHours(0, 0, 0, 0);
+    return dueDate < today;
+  }).length;
   const completionRate = tasks.length ? Math.round((completedTasks / tasks.length) * 100) : 0;
 
   // Load tasks on mount
@@ -323,7 +342,7 @@ export default function Dashboard() {
 
         {activeTab === 'dashboard' && (
           <>
-            <section className="mb-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            <section className="mb-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
               <div className="glass-panel rounded-[28px] p-5 animate-slide-up">
                 <div className="flex items-center justify-between">
                   <div>
@@ -361,6 +380,19 @@ export default function Dashboard() {
                   </div>
                 </div>
                 <p className="mt-4 text-sm theme-text-soft">{upcomingTasks} tasks with upcoming deadlines</p>
+              </div>
+
+              <div className="glass-panel rounded-[28px] p-5 animate-slide-up" style={{ animationDelay: '0.15s' }}>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.22em] theme-text-muted">Overdue</p>
+                    <p className="mt-3 text-3xl font-bold theme-text">{overdueTasks}</p>
+                  </div>
+                  <div className="rounded-2xl bg-red-50 p-3">
+                    <Clock3 className="h-5 w-5 text-red-600" />
+                  </div>
+                </div>
+                <p className="mt-4 text-sm theme-text-soft">{overdueTasks} overdue tasks based on due date</p>
               </div>
             </section>
 

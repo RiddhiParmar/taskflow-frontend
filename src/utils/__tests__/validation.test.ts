@@ -23,15 +23,29 @@ describe('validation utilities', () => {
 
   describe('validatePassword', () => {
     it('should validate strong passwords', () => {
-      const result = validatePassword('StrongPass123');
+      const result = validatePassword('StrongPass123!');
       expect(result.isValid).toBe(true);
       expect(result.errors).toHaveLength(0);
     });
 
-    it('should reject weak passwords', () => {
-      const result = validatePassword('weak');
+    it('should reject passwords shorter than 8 characters', () => {
+      const result = validatePassword('Weak1!');
       expect(result.isValid).toBe(false);
-      expect(result.errors.length).toBeGreaterThan(0);
+      expect(result.errors).toContain('password must be a 8 characters log');
+    });
+
+    it('should reject passwords longer than 128 characters', () => {
+      const result = validatePassword(`Aa1!${'a'.repeat(125)}`);
+      expect(result.isValid).toBe(false);
+      expect(result.errors).toContain('password not be 128 characters long');
+    });
+
+    it('should reject passwords that do not meet complexity requirements', () => {
+      const result = validatePassword('lowercaseonly');
+      expect(result.isValid).toBe(false);
+      expect(result.errors).toContain(
+        'password should be a combination of uppercase, lowercase, number and special character'
+      );
     });
   });
 
